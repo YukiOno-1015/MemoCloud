@@ -8,11 +8,19 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    @IBOutlet weak var label: UILabel!
+    var payloadText: String? {
+        didSet {
+            guard label != nil else { return }
+            label.text = payloadText
+            view.backgroundColor = backgroundColor ?? .white
+        }
+    }
+
+    var backgroundColor: UIColor?
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-
-
 }
-

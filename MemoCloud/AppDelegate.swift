@@ -12,6 +12,7 @@ import Foundation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
+    var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
@@ -70,8 +71,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        completionHandler(.newData)
-        print(String(userInfo.description))
+
+        // MARK: 04. get notification payload
+        guard let apsPart = userInfo["aps"] as? [String: AnyObject] else {
+            completionHandler(.failed)
+            return
+        }
+        print(apsPart)
+        let text = apsPart.map { (key, value) in "\(key): \(value)" }.joined(separator: "\n")
+        print(text)
+        print(userInfo["call"])
+        guard let call = userInfo["call"] as? [String: AnyObject] else {
+            completionHandler(.failed)
+            return
+        }
+        print(call);
+        let text2 = call.map { (key, value) in "\(key): \(value)" }.joined(separator: "\n")
+        print(call);
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
